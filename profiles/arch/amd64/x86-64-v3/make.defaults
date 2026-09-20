@@ -1,0 +1,10 @@
+CFLAGS="${CFLAGS} -march=x86-64-v3"
+CXXFLAGS="${CXXFLAGS} -march=x86-64-v3"
+
+FFLAGS="${FFLAGS} -march=x86-64-v3"
+FCFLAGS="${FCFLAGS} -march=x86-64-v3"
+
+RUSTFLAGS="${RUSTFLAGS} --codegen target-cpu=x86-64-v3"
+GOAMD64="v3"
+
+KCFLAGS="${KCFLAGS} -march=x86-64-v3"

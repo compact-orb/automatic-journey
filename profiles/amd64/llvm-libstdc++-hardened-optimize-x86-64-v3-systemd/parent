@@ -1,0 +1,6 @@
+gentoo:default/linux/amd64/23.0/llvm
+../../features/llvm-libstdc++
+../../features/optimize
+../../arch/amd64/x86-64-v3
+gentoo:features/hardened/amd64
+gentoo:targets/systemd

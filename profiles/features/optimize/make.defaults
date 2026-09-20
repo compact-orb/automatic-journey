@@ -1,0 +1,21 @@
+CFLAGS="${CFLAGS} -O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -flto=thin"
+CXXFLAGS="${CFLAGS}"
+
+FFLAGS="${FFLAGS} -O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -fno-trapping-math -fno-asynchronous-unwind-tables -flto"
+FCFLAGS="${FFLAGS}"
+
+LDFLAGS="${LDFLAGS} -fuse-ld=lld -Wl,--gc-sections -Wl,--undefined-version -flto=thin -Wl,--lto-O3"
+
+RUSTFLAGS="${RUSTFLAGS} --codegen linker-plugin-lto"
+CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="clang"
+CARGO_HOST_LINKER="clang"
+
+CGO_CFLAGS="${CFLAGS}"
+CGO_CXXFLAGS="${CXXFLAGS}"
+CGO_FFLAGS="${FFLAGS}"
+CGO_LDFLAGS="${LDFLAGS}"
+
+LLVM="1"
+KCFLAGS="${KCFLAGS} -O3 -pipe -fno-asynchronous-unwind-tables"
+
+USE="${USE} lto pgo jemalloc orc"
