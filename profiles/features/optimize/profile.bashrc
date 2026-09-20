@@ -53,7 +53,26 @@ sanitize_gcc_flags() {
     fi
 }
 
-sanitize_gcc_flags
-pre_src_prepare() { sanitize_gcc_flags; }
-pre_src_configure() { sanitize_gcc_flags; }
-pre_src_compile() { sanitize_gcc_flags; }
+sanitize_polly_flags() {
+    if ! compgen -G '/usr/lib/llvm/*/lib*/LLVMPolly.so' >/dev/null; then
+        local v
+        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS; do
+            _opt_strip_flag "$v" "-Xclang=-mllvm"
+            _opt_strip_flag "$v" "-Xclang=-polly*"
+            _opt_strip_flag "$v" "-mllvm"
+            _opt_strip_flag "$v" "-polly*"
+        done
+        _opt_strip_flag KCFLAGS "-mllvm"
+        _opt_strip_flag KCFLAGS "-polly*"
+    fi
+}
+
+sanitize_flags() {
+    sanitize_gcc_flags
+    sanitize_polly_flags
+}
+
+sanitize_flags
+pre_src_prepare() { sanitize_flags; }
+pre_src_configure() { sanitize_flags; }
+pre_src_compile() { sanitize_flags; }

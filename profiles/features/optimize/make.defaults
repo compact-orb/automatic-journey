@@ -1,4 +1,4 @@
-CFLAGS="${CFLAGS} -O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -flto=thin"
+CFLAGS="${CFLAGS} -O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -flto=thin -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
 CXXFLAGS="${CFLAGS}"
 
 FFLAGS="${FFLAGS} -O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -fno-trapping-math -fno-asynchronous-unwind-tables -flto"
@@ -16,6 +16,6 @@ CGO_FFLAGS="${FFLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
 LLVM="1"
-KCFLAGS="${KCFLAGS} -O3 -pipe -fno-asynchronous-unwind-tables"
+KCFLAGS="${KCFLAGS} -O3 -pipe -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting"
 
-USE="${USE} lto pgo jemalloc orc"
+USE="${USE} jemalloc lto orc pgo profile"

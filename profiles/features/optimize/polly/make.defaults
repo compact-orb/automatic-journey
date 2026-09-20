@@ -1,4 +1,0 @@
-CFLAGS="${CFLAGS} -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
-CXXFLAGS="${CXXFLAGS} -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
-
-KCFLAGS="${KCFLAGS} -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting"
