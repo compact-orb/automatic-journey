@@ -54,7 +54,31 @@ sanitize_gcc_flags() {
 }
 
 sanitize_polly_flags() {
-    if ! compgen -G '/usr/lib/llvm/*/lib*/LLVMPolly.so' >/dev/null; then
+    _opt_is_gcc && return 0
+
+    local cc="${CC:-clang}"
+    if declare -f tc-getCC >/dev/null; then
+        cc="$(tc-getCC 2>/dev/null)"
+        cc="${cc:-${CC:-clang}}"
+    fi
+
+    if [[ "${_OPT_POLLY_TESTED_CC}" != "${cc}" ]]; then
+        _OPT_POLLY_TESTED_CC="${cc}"
+        if ${cc} -Xclang=-mllvm -Xclang=-polly -x c -c /dev/null -o /dev/null 2>/dev/null; then
+            _OPT_POLLY_SUPPORTED=1
+        else
+            _OPT_POLLY_SUPPORTED=0
+        fi
+    fi
+
+    if [[ "${_OPT_POLLY_SUPPORTED}" -eq 0 ]]; then
+        if [[ -z "${_OPT_POLLY_WARNED+x}" ]]; then
+            _OPT_POLLY_WARNED=1
+            if declare -f ewarn >/dev/null; then
+                ewarn "LLVM Polly is not supported by ${cc}; stripping Polly optimization flags."
+            fi
+        fi
+
         local v
         for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS; do
             _opt_strip_flag "$v" "-Xclang=-mllvm"
