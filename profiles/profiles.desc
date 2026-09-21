@@ -1,2 +1,2 @@
-amd64 amd64/llvm-libstdc++-hardened-optimize-x86-64-v3-systemd exp
+amd64 amd64/llvm-libstdc++-hardened-systemd-optimize-x86-64-v3 exp
 amd64 amd64/llvm-libstdc++-hardened-gnome-systemd exp
