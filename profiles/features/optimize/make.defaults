@@ -18,4 +18,4 @@ CGO_LDFLAGS="${LDFLAGS}"
 LLVM="1"
 KCFLAGS="-O3 -pipe -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting"
 
-USE="${USE} jemalloc lto orc pgo profile"
+USE="${USE} jemalloc jit lto orc pgo profile"
