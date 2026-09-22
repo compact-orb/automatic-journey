@@ -1,3 +1,4 @@
 *app-arch/zstd
 *llvm-runtimes/clang-runtime
 *llvm-runtimes/compiler-rt-sanitizers
+*net-misc/aria2
