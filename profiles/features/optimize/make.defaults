@@ -18,4 +18,15 @@ CGO_LDFLAGS="${LDFLAGS}"
 LLVM="1"
 KCFLAGS="-O3 -pipe -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting"
 
-USE="${USE} jemalloc jit lto orc pgo profile"
+USE="${USE} dist-kernel jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
+
+EMERGE_DEFAULT_OPTS="--getbinpkgonly --with-bdeps=n"
+
+FEATURES="binpkg-request-signature"
+
+FETCHCOMMAND="/usr/bin/aria2c --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --out=\"\${FILE}\" --split=4 \"\${URI}\""
+RESUMECOMMAND="/usr/bin/aria2c --continue=true --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --out=\"\${FILE}\" --split=4 \"\${URI}\""
+
+ACCEPT_LICENSE="*"
+
+GENTOO_MIRRORS="http://gentoo.mirrors.ovh.net/gentoo-distfiles http://mirror.planetunix.net/pub/gentoo http://distfiles.gentoo.org"
