@@ -124,7 +124,7 @@ sanitize_lld_flags() {
             _opt_strip_flag "$v" "-flto=thin"
         done
         for v in LDFLAGS CGO_LDFLAGS; do
-            _opt_strip_flag "$v" "-fuse-ld=lld"
+            _opt_translate_flag "$v" "-fuse-ld=lld" "-fuse-ld=bfd"
             _opt_strip_flag "$v" "-Wl,--lto-O3"
             _opt_strip_flag "$v" "-Wl,--undefined-version"
             _opt_strip_flag "$v" "-flto=thin"
