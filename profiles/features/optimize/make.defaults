@@ -20,7 +20,7 @@ KCFLAGS="-O3 -pipe -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-v
 
 USE="${USE} dist-kernel jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
 
-# EMERGE_DEFAULT_OPTS="--getbinpkgonly --with-bdeps=n"
+EMERGE_DEFAULT_OPTS="--getbinpkgonly --with-bdeps=n"
 
 FEATURES="binpkg-request-signature"
 
