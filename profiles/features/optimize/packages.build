@@ -1,2 +1,3 @@
-llvm-runtimes/clang-runtime
+app-arch/zstd
 llvm-runtimes/compiler-rt-sanitizers
+net-misc/aria2
