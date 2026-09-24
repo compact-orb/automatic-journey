@@ -1,4 +1,4 @@
-CFLAGS="-O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -flto=thin -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
+CFLAGS="-O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -fuse-ld=lld -flto=thin -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
 CXXFLAGS="${CFLAGS}"
 
 FFLAGS="-O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -fno-trapping-math -fno-asynchronous-unwind-tables -flto"
