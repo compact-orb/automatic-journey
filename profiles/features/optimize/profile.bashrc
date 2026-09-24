@@ -43,7 +43,6 @@ sanitize_gcc_flags() {
             _opt_strip_flag "$v" "-Xclang=-polly*"
             _opt_strip_flag "$v" "-mllvm"
             _opt_strip_flag "$v" "-polly*"
-            _opt_translate_flag "$v" "-fuse-ld=lld" "-fuse-ld=bfd"
             _opt_translate_flag "$v" "-flto=thin" "-flto=auto"
         done
 
