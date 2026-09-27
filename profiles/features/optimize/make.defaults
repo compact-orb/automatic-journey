@@ -1,10 +1,10 @@
-CFLAGS="-O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -ffp-contract=fast -fno-asynchronous-unwind-tables -flto=thin -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting"
+CFLAGS="-O3 -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -fdata-sections -ffp-contract=fast -ffunction-sections -flto=thin -fno-asynchronous-unwind-tables -fno-math-errno -fno-plt -fno-semantic-interposition -pipe"
 CXXFLAGS="${CFLAGS}"
 
-FFLAGS="-O3 -pipe -fdata-sections -ffunction-sections -fno-plt -fno-semantic-interposition -fno-math-errno -fno-trapping-math -fno-asynchronous-unwind-tables -flto"
+FFLAGS="-O3 -fdata-sections -ffunction-sections -flto -fno-asynchronous-unwind-tables -fno-math-errno -fno-plt -fno-semantic-interposition -fno-trapping-math -pipe"
 FCFLAGS="${FFLAGS}"
 
-LDFLAGS="${LDFLAGS} -fuse-ld=lld -Wl,--gc-sections -Wl,--undefined-version -flto=thin -Wl,--lto-O3"
+LDFLAGS="${LDFLAGS} -Wl,--gc-sections -Wl,--lto-O3 -Wl,--undefined-version -flto=thin -fuse-ld=lld"
 
 RUSTFLAGS="--codegen linker-plugin-lto"
 CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="clang"
@@ -16,7 +16,7 @@ CGO_FFLAGS="${FFLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
 LLVM="1"
-KCFLAGS="-O3 -pipe -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting"
+KCFLAGS="-O3 -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-invariant-load-hoisting -mllvm -polly-vectorizer=stripmine -pipe"
 
 USE="${USE} apparmor dist-kernel jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
 
