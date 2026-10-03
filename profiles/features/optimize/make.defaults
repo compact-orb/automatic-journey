@@ -6,9 +6,7 @@ FCFLAGS="${FFLAGS}"
 
 LDFLAGS="${LDFLAGS} -Wl,--gc-sections -Wl,--lto-O3 -Wl,--undefined-version -flto=thin -fuse-ld=lld"
 
-RUSTFLAGS="--codegen linker-plugin-lto"
-CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="clang"
-CARGO_HOST_LINKER="clang"
+RUSTFLAGS="--codegen linker=clang --codegen linker-plugin-lto"
 
 CGO_CFLAGS="${CFLAGS}"
 CGO_CXXFLAGS="${CXXFLAGS}"
