@@ -15,7 +15,7 @@ CGO_LDFLAGS="${LDFLAGS}"
 
 KCFLAGS="-O3 -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-invariant-load-hoisting -mllvm -polly-vectorizer=stripmine -pipe"
 
-USE="apparmor dist-kernel jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
+USE="apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
 
 EMERGE_DEFAULT_OPTS="--getbinpkgonly --with-bdeps=n"
 
