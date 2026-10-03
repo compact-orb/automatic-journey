@@ -29,7 +29,10 @@ _opt_is_gcc() {
     local cc_bin="${cc##*/}"; cc_bin="${cc_bin%% *}"
     local cxx_bin="${cxx##*/}"; cxx_bin="${cxx_bin%% *}"
 
-    if [[ "${cc_bin}" =~ (^|-)gcc$ || "${cxx_bin}" =~ (^|-)g\+\+$ || "${CATEGORY}/${PN}" == "sys-devel/gcc" || "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]; then
+    if [[ "${cc_bin}" =~ (^|-)gcc$ ||
+        "${cxx_bin}" =~ (^|-)g\+\+$ ||
+        "${CATEGORY}/${PN}" == "sys-devel/gcc" ||
+        "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]; then
         return 0
     fi
     return 1
@@ -80,7 +83,8 @@ if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
                     einfo "  - ${snippet}"
                 done
                 ./scripts/kconfig/merge_config.sh -m -r \
-                    .config "${snippets[@]}" || die "Failed to merge profile kernel configs"
+                    .config "${snippets[@]}" ||
+                    die "Failed to merge profile kernel configs"
             fi
         fi
     }
