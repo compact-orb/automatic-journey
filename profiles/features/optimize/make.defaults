@@ -15,7 +15,6 @@ CGO_CXXFLAGS="${CXXFLAGS}"
 CGO_FFLAGS="${FFLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
-LLVM="1"
 KCFLAGS="-O3 -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-invariant-load-hoisting -mllvm -polly-vectorizer=stripmine -pipe"
 
 USE="${USE} apparmor dist-kernel jemalloc jit ktls lto modules-sign orc pgo profile secureboot tpm"
