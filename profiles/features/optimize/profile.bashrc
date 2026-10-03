@@ -61,3 +61,27 @@ sanitize_flags
 pre_src_prepare() { sanitize_flags; }
 pre_src_configure() { sanitize_flags; }
 pre_src_compile() { sanitize_flags; }
+
+if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
+    post_src_prepare() {
+        local profile_dir=$(dirname "${BASH_SOURCE[0]}")
+        local config_dir="${profile_dir}/kernel-config.d"
+
+        if [[ -d "${config_dir}" ]]; then
+            local shopt_save=$(shopt -p nullglob)
+            shopt -s nullglob
+            local snippets=( "${config_dir}"/*.config )
+            eval "${shopt_save}"
+
+            if [[ ${#snippets[@]} -gt 0 ]]; then
+                einfo "Applying profile kernel config snippets:"
+                local snippet
+                for snippet in "${snippets[@]}"; do
+                    einfo "  - ${snippet}"
+                done
+                ./scripts/kconfig/merge_config.sh -m -r \
+                    .config "${snippets[@]}" || die "Failed to merge profile kernel configs"
+            fi
+        fi
+    }
+fi
