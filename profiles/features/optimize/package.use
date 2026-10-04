@@ -1,2 +1,14 @@
+app-arch/7zip rar uasm
+app-containers/podman wrapper
+dev-util/android-tools udev
 llvm-runtimes/clang-runtime polly
+media-video/pipewire sound-server
+net-misc/networkmanager iwd
+sys-apps/fwupd nvme uefi
+sys-apps/systemd boot cryptsetup
 sys-devel/gcc -pgo
+sys-kernel/installkernel systemd-boot
+www-servers/nginx aio
+
+# required by app-containers/podman
+net-firewall/iptables nftables
