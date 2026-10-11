@@ -19,7 +19,7 @@ USE="apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanag
 
 EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
 
-FEATURES="binpkg-request-signature"
+FEATURES="binpkg-request-signature parallel-install"
 
 FETCHCOMMAND="/usr/bin/aria2c --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
 RESUMECOMMAND="/usr/bin/aria2c --continue=true --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
