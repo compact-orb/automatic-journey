@@ -21,6 +21,8 @@ EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
 
 FEATURES="binpkg-request-signature parallel-install"
 
+PORTAGE_CHECKSUM_FILTER="* -md5"
+
 FETCHCOMMAND="/usr/bin/aria2c --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
 RESUMECOMMAND="/usr/bin/aria2c --continue=true --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
 
