@@ -60,13 +60,45 @@ sanitize_flags() {
     sanitize_gcc_flags
 }
 
+_apply_profile_patches() {
+    local profile_dir=$(dirname "${BASH_SOURCE[0]}")
+    local patch_base="${profile_dir}/patches/${CATEGORY}"
+    local patch_dirs=(
+        "${patch_base}/${PN}"
+        "${patch_base}/${P}"
+        "${patch_base}/${PF}"
+    )
+    local dir
+    for dir in "${patch_dirs[@]}"; do
+        if [[ -d "${dir}" ]]; then
+            local shopt_save=$(shopt -p nullglob)
+            shopt -s nullglob
+            local patches=( "${dir}"/*.patch "${dir}"/*.diff )
+            eval "${shopt_save}"
+
+            if [[ ${#patches[@]} -gt 0 ]]; then
+                einfo "Applying profile patches from ${dir}:"
+                local p
+                for p in "${patches[@]}"; do
+                    eapply "${p}"
+                done
+            fi
+        fi
+    done
+}
+
 sanitize_flags
 pre_src_prepare() { sanitize_flags; }
 pre_src_configure() { sanitize_flags; }
 pre_src_compile() { sanitize_flags; }
 
+post_src_prepare() {
+    _apply_profile_patches
+}
+
 if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
     post_src_prepare() {
+        _apply_profile_patches
         local profile_dir=$(dirname "${BASH_SOURCE[0]}")
         local config_dir="${profile_dir}/kernel-config.d"
 
@@ -86,16 +118,6 @@ if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
                     .config "${snippets[@]}" ||
                     die "Failed to merge profile kernel configs"
             fi
-        fi
-    }
-fi
-
-if [[ "${CATEGORY}/${PN}" == "sys-libs/libapparmor" ]]; then
-    post_src_prepare() {
-        if [[ -f src/kernel.c ]]; then
-            local pattern='char buff\[total_size\];'
-            local repl='char buff[sizeof(struct lsm_ctx) + 8];'
-            sed -i "s/${pattern}/${repl}/" src/kernel.c || die
         fi
     }
 fi

@@ -1,0 +1,15 @@
+Fix Clang compilation failure due to variable-length array in union.
+Clang rejects variable length array in structure/union types even with
+GNU extensions enabled. Replace runtime variable bound with sizeof constant.
+
+--- a/src/kernel.c
++++ b/src/kernel.c
+@@ -372,7 +372,7 @@ static void self_syscall_enabled_init_once(void)
+ {
+ 	__u32 total_size = sizeof(struct lsm_ctx) + 8;
+ 	union {
+ 		struct lsm_ctx ctx_buff;
+-		char buff[total_size]; /* force allocate trailing space */
++		char buff[sizeof(struct lsm_ctx) + 8]; /* force allocate trailing space */
+ 	} buff;
+ 	struct lsm_ctx *ctx = &buff.ctx_buff;
