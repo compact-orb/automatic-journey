@@ -2,4 +2,8 @@ app-admin/ansible
 app-forensics/lynis ~amd64
 sys-kernel/gentoo-kernel ~amd64
 sys-kernel/gentoo-sources ~amd64
+sys-apps/apparmor ~amd64
+sys-apps/apparmor-utils ~amd64
+sys-libs/libapparmor ~amd64
+sec-policy/apparmor-profiles ~amd64
 virtual/dist-kernel ~amd64
