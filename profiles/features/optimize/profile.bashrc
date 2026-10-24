@@ -89,3 +89,13 @@ if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
         fi
     }
 fi
+
+if [[ "${CATEGORY}/${PN}" == "sys-libs/libapparmor" ]]; then
+    post_src_prepare() {
+        if [[ -f src/kernel.c ]]; then
+            local pattern='char buff\[total_size\];'
+            local repl='char buff[sizeof(struct lsm_ctx) + 8];'
+            sed -i "s/${pattern}/${repl}/" src/kernel.c || die
+        fi
+    }
+fi
