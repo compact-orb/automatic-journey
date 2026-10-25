@@ -3,21 +3,14 @@
 
 EAPI=8
 
-inherit unpacker
+inherit go-module shell-completion systemd
 
 MY_PN="apparmor.d"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Full set of AppArmor profiles and abstractions from apparmor.d"
 HOMEPAGE="https://github.com/roddhjav/apparmor.d"
-SRC_URI="
-	https://github.com/roddhjav/${MY_PN}/releases/download/v${PV}/${MY_P}.tar.gz
-	tools? (
-		amd64? (
-			https://pkg.pujol.io/debian/repo/pool/main/a/${MY_PN}/${MY_PN}-tools_${PV}-1+deb13_amd64.deb -> ${MY_P}-tools-amd64.deb
-		)
-	)
-"
+SRC_URI="https://github.com/roddhjav/${MY_PN}/releases/download/v${PV}/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -29,65 +22,81 @@ RDEPEND="
 	>=sys-apps/apparmor-5.0
 	sec-policy/apparmor-profiles[minimal]
 "
+BDEPEND="
+	dev-lang/go
+"
 
 S="${WORKDIR}/${MY_P}"
-
-QA_PRESTRIPPED="usr/bin/aa-.*"
 
 src_prepare() {
 	default
 
-	# In AppArmor 5.0, @{pci_bus} is defined in tunables/system.
-	# Append to it to prevent duplicate variable declaration error.
-	sed -i 's/@{pci_bus}=/@{pci_bus}+=/' apparmor.d/tunables/multiarch.d/system || die
-
-	# Fix unix_chkpwd execution mode and attachment
+	# Adjust unix_chkpwd execution path for Gentoo (/usr/bin/unix_chkpwd)
 	sed -i 's:@{exec_path} = @{sbin}/unix_chkpwd:@{exec_path} = /{,usr/}{bin,sbin}/unix_chkpwd:' \
 		apparmor.d/profiles-s-z/unix-chkpwd || die
+}
 
-	# Allow systemd-userwork to read /etc/login.defs
-	echo "  @{etc_ro}/login.defs r," >> apparmor.d/groups/systemd/systemd-userwork || die
+src_compile() {
+	# Compile the profile generator
+	ego build -o bin/prebuild ./cmd/prebuild
+
+	# Render profiles, convert ABI 5.0 to 4.0, and generate systemd drop-ins
+	# DISTRIBUTION=opensuse targets AppArmor 5.0 with ABI 4.0 matching Gentoo
+	DISTRIBUTION=opensuse ./bin/prebuild --buildir .build || die "prebuild failed"
+
+	# Build management tools if USE=tools is enabled
+	if use tools; then
+		ego build -o bin/aa-install ./cmd/aa-install
+		ego build -o bin/aa-log ./cmd/aa-log
+		ego build -o bin/aa-mode ./cmd/aa-mode
+	fi
 }
 
 src_install() {
 	# Base abstractions and tunables (merged cleanly with apparmor-profiles[minimal])
 	insinto /etc/apparmor.d/abstractions
-	doins -r apparmor.d/abstractions/*
+	doins -r .build/apparmor.d/abstractions/*
 
 	insinto /etc/apparmor.d/tunables
-	doins -r apparmor.d/tunables/*
+	doins -r .build/apparmor.d/tunables/*
 
 	# Gentoo-specific PAM drop-in
 	insinto /etc/apparmor.d/abstractions/authentication.d
 	newins - gentoo.conf <<< "/usr/share/pam/** r,"
 
 	# Systemd drop-in units for profile confinement
+	local system_unit_dir="$(systemd_get_systemunitdir)"
+	local user_unit_dir="$(systemd_get_userunitdir)"
 	local file service
-	for file in systemd/system/*; do
+
+	for file in .build/systemd/system/*; do
 		[[ -f "${file}" ]] || continue
 		service="$(basename "${file}")"
-		insinto "/usr/lib/systemd/system/${service}.d"
+		insinto "${system_unit_dir}/${service}.d"
 		newins "${file}" apparmor.conf
 	done
 
-	for file in systemd/user/*; do
+	for file in .build/systemd/user/*; do
 		[[ -f "${file}" ]] || continue
 		service="$(basename "${file}")"
-		insinto "/usr/lib/systemd/user/${service}.d"
+		insinto "${user_unit_dir}/${service}.d"
 		newins "${file}" apparmor.conf
 	done
 
 	# Prebuilt profile collection in /usr/share/apparmor.d/
 	insinto /usr/share/apparmor.d
-	doins -r apparmor.d/{groups,mappings,namespaces,profiles-*}
+	doins -r .build/apparmor.d/{groups,mappings,namespaces,profiles-*}
 
 	# Tooling
-	if use tools && use amd64 && [[ -d "${WORKDIR}/usr/bin" ]]; then
-		dobin "${WORKDIR}"/usr/bin/aa-*
-		if [[ -d "${WORKDIR}/usr/share/man" ]]; then
-			gzip -d "${WORKDIR}"/usr/share/man/man1/*.gz 2>/dev/null
-			doman "${WORKDIR}"/usr/share/man/man1/aa-*.1
-		fi
+	if use tools; then
+		dobin bin/aa-install bin/aa-log bin/aa-mode
+		doman share/man/man1/aa-install.1 share/man/man1/aa-mode.1 share/man/man8/aa-log.8
+		dobashcomp share/bash-completion/completions/aa-install \
+			share/bash-completion/completions/aa-log \
+			share/bash-completion/completions/aa-mode
+		dozshcomp share/zsh/site-functions/_aa-install.zsh \
+			share/zsh/site-functions/_aa-log.zsh \
+			share/zsh/site-functions/_aa-mode.zsh
 	fi
 
 	# Runtime state directories
