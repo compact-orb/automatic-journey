@@ -1,0 +1,18 @@
+Fix ExecStart/ExecReload path in apparmor.service for Gentoo packaging.
+Gentoo's ebuild installs the profile loader to /usr/share/apparmor/apparmor_load.sh
+instead of /lib/apparmor/apparmor.systemd.
+See Gentoo bug #984784.
+
+--- a/init/apparmor.service
++++ b/init/apparmor.service
+@@ -19,8 +19,8 @@
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/lib/apparmor/apparmor.systemd reload
+-ExecReload=/lib/apparmor/apparmor.systemd reload
++ExecStart=/usr/share/apparmor/apparmor_load.sh
++ExecReload=/usr/share/apparmor/apparmor_load.sh
+ 
+ # systemd maps 'restart' to 'stop; start' which means removing AppArmor confinement
+ # from running processes (and not being able to re-apply it later).
