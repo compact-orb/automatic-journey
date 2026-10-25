@@ -8,6 +8,7 @@ sys-apps/fwupd nvme uefi
 sys-apps/systemd boot cryptsetup
 sys-devel/gcc -pgo
 sys-kernel/installkernel systemd-boot
+sec-policy/apparmor-profiles minimal
 www-servers/nginx aio
 
 # required by app-containers/podman

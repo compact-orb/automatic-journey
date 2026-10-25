@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>compact-orb@outlook.com</email>
+		<name>compact-orb</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">roddhjav/apparmor.d</remote-id>
+	</upstream>
+	<use>
+		<flag name="tools">Install userland management CLI tools (aa-install, aa-log, aa-mode)</flag>
+	</use>
+</pkgmetadata>
