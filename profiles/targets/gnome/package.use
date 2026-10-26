@@ -1,3 +1,6 @@
-# Avoid gpm across GNOME; modern Wayland/X11 desktops do not need gpm and it
-# pulls 32-bit multilib.
+# Mitigate circular dependencies
+dev-libs/glib -sysprof
+gnome-base/gnome-keyring -ssh-agent
+
+# Modern desktops do not use gpm and it pulls 32-bit multilib
 sys-libs/ncurses -gpm
