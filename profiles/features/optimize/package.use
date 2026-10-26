@@ -11,5 +11,8 @@ sys-kernel/installkernel systemd-boot
 sec-policy/apparmor-profiles minimal
 www-servers/nginx aio
 
+# mitigate circular dependencies
+dev-libs/glib -sysprof
+
 # required by app-containers/podman
 net-firewall/iptables nftables

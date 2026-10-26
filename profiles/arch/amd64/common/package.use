@@ -1,0 +1,3 @@
+# Satisfy 32-bit multilib requirement for libxml2[icu,abi_x86_32] under LLVM.
+# Kept in arch/amd64/common so arm64 profiles never inherit x86 ABIs.
+dev-libs/icu abi_x86_32
