@@ -5,3 +5,4 @@ gentoo:features/hardened/amd64
 ../../../arch/amd64/common
 ../../../features/optimize
 ../../../arch/amd64/x86-64-v3
+
