@@ -1,8 +1,9 @@
 # Mitigate circular dependencies
-dev-libs/glib -sysprof
 dev-python/pillow -truetype
 gnome-base/gnome-keyring -ssh-agent
 media-libs/libavif -gdk-pixbuf
 
 # Modern desktops do not use gpm and it pulls 32-bit multilib
 sys-libs/ncurses -gpm
+
+net-libs/ngtcp2 gnutls
