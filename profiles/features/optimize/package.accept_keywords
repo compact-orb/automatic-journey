@@ -1,4 +1,5 @@
-app-admin/ansible
+app-admin/ansible ~amd64
+app-admin/ansible-core ~amd64
 app-forensics/lynis ~amd64
 sys-kernel/gentoo-kernel ~amd64
 sys-kernel/gentoo-sources ~amd64
