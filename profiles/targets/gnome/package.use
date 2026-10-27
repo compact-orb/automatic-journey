@@ -6,4 +6,5 @@ media-libs/libavif -gdk-pixbuf
 # Modern desktops do not use gpm and it pulls 32-bit multilib
 sys-libs/ncurses -gpm
 
+# Required by net-fs/samba for SMB-over-QUIC
 net-libs/ngtcp2 gnutls
