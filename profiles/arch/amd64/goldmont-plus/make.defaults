@@ -1,0 +1,10 @@
+CFLAGS="${CFLAGS} -march=goldmont-plus"
+CXXFLAGS="${CXXFLAGS} -march=goldmont-plus"
+
+FFLAGS="${FFLAGS} -march=goldmont-plus"
+FCFLAGS="${FCFLAGS} -march=goldmont-plus"
+
+RUSTFLAGS="${RUSTFLAGS} --codegen target-cpu=goldmont-plus"
+GOAMD64="v2"
+
+KCFLAGS="${KCFLAGS} -march=goldmont-plus"
