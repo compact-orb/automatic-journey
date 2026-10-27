@@ -5,12 +5,43 @@ EAPI=8
 
 inherit go-module shell-completion systemd
 
+EGO_SUM=(
+	"github.com/davecgh/go-spew v1.1.0/go.mod"
+	"github.com/davecgh/go-spew v1.1.1"
+	"github.com/davecgh/go-spew v1.1.1/go.mod"
+	"github.com/fsnotify/fsnotify v1.10.1"
+	"github.com/fsnotify/fsnotify v1.10.1/go.mod"
+	"github.com/pmezard/go-difflib v1.0.0"
+	"github.com/pmezard/go-difflib v1.0.0/go.mod"
+	"github.com/stretchr/objx v0.1.0/go.mod"
+	"github.com/stretchr/objx v0.4.0/go.mod"
+	"github.com/stretchr/objx v0.5.0/go.mod"
+	"github.com/stretchr/objx v0.5.2/go.mod"
+	"github.com/stretchr/testify v1.11.1"
+	"github.com/stretchr/testify v1.11.1/go.mod"
+	"github.com/stretchr/testify v1.7.1/go.mod"
+	"github.com/stretchr/testify v1.8.0/go.mod"
+	"github.com/stretchr/testify v1.8.4/go.mod"
+	"golang.org/x/sys v0.47.0"
+	"golang.org/x/sys v0.47.0/go.mod"
+	"gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod"
+	"gopkg.in/ini.v1 v1.67.3"
+	"gopkg.in/ini.v1 v1.67.3/go.mod"
+	"gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod"
+	"gopkg.in/yaml.v3 v3.0.1"
+	"gopkg.in/yaml.v3 v3.0.1/go.mod"
+)
+go-module_set_globals
+
 MY_PN="apparmor.d"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Full set of AppArmor profiles and abstractions from apparmor.d"
 HOMEPAGE="https://github.com/roddhjav/apparmor.d"
-SRC_URI="https://github.com/roddhjav/${MY_PN}/releases/download/v${PV}/${MY_P}.tar.gz"
+SRC_URI="
+	https://github.com/roddhjav/${MY_PN}/releases/download/v${PV}/${MY_P}.tar.gz
+	${EGO_SUM_SRC_URI}
+"
 
 LICENSE="GPL-2"
 SLOT="0"
