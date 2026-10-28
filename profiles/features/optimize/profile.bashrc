@@ -122,11 +122,10 @@ _source_profile_package_env() {
             [[ -z "${atom}" || -z "${env_names}" ]] && continue
 
             local atom_stripped="${atom#=}"
-            if [[ "${atom}" == "${cp}" || \
-                  "${atom}" == "${cps}" || \
-                  "${atom_stripped}" == "${cpv}" || \
-                  "${atom_stripped}" == "${cpf}" || \
-                  "${cp}" == ${atom} ]]; then
+            if [[ "${cp}" == ${atom} || \
+                  "${cps}" == ${atom} || \
+                  "${cpv}" == ${atom_stripped} || \
+                  "${cpf}" == ${atom_stripped} ]]; then
                 local env_name
                 for env_name in ${env_names}; do
                     local env_path="${env_dir}/${env_name}"
