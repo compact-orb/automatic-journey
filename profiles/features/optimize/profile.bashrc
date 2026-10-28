@@ -87,6 +87,59 @@ _apply_profile_patches() {
     done
 }
 
+_source_profile_package_env() {
+    local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
+    local penv_target="${profile_dir}/package.env"
+    local env_dir="${profile_dir}/env"
+
+    [[ -e "${penv_target}" && -d "${env_dir}" ]] || return 0
+
+    local -a penv_files=()
+    if [[ -d "${penv_target}" ]]; then
+        local f
+        for f in "${penv_target}"/*; do
+            [[ -f "${f}" ]] && penv_files+=("${f}")
+        done
+    elif [[ -f "${penv_target}" ]]; then
+        penv_files+=("${penv_target}")
+    fi
+
+    local cp="${CATEGORY}/${PN}"
+    local cps="${CATEGORY}/${PN}:${SLOT%/*}"
+    local cpv="${CATEGORY}/${P}"
+    local cpf="${CATEGORY}/${PF}"
+
+    local penv_file line
+    for penv_file in "${penv_files[@]}"; do
+        while IFS= read -r line || [[ -n "${line}" ]]; do
+            line="${line%%#*}"
+            line="${line#"${line%%[![:space:]]*}"}"
+            line="${line%"${line##*[![:space:]]}"}"
+            [[ -z "${line}" ]] && continue
+
+            local atom env_names
+            read -r atom env_names <<< "${line}"
+            [[ -z "${atom}" || -z "${env_names}" ]] && continue
+
+            local atom_stripped="${atom#=}"
+            if [[ "${atom}" == "${cp}" || \
+                  "${atom}" == "${cps}" || \
+                  "${atom_stripped}" == "${cpv}" || \
+                  "${atom_stripped}" == "${cpf}" || \
+                  "${cp}" == ${atom} ]]; then
+                local env_name
+                for env_name in ${env_names}; do
+                    local env_path="${env_dir}/${env_name}"
+                    if [[ -f "${env_path}" ]]; then
+                        source "${env_path}"
+                    fi
+                done
+            fi
+        done < "${penv_file}"
+    done
+}
+
+_source_profile_package_env
 sanitize_flags
 pre_src_prepare() { sanitize_flags; }
 pre_src_configure() { sanitize_flags; }
