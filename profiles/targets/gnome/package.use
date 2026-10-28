@@ -3,6 +3,9 @@ dev-python/pillow -truetype
 gnome-base/gnome-keyring -ssh-agent
 media-libs/libavif -gdk-pixbuf
 
+# Disable obsolete bogofilter plugin in Evolution
+mail-client/evolution -bogofilter
+
 # Modern desktops do not use gpm and it pulls 32-bit multilib
 sys-libs/ncurses -gpm
 
