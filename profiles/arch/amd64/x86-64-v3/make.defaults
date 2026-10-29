@@ -1,10 +1,10 @@
-CFLAGS="${CFLAGS} -march=x86-64-v3"
-CXXFLAGS="${CXXFLAGS} -march=x86-64-v3"
+CFLAGS="${CFLAGS} -march=x86-64-v3 -maes -mpclmul"
+CXXFLAGS="${CXXFLAGS} -march=x86-64-v3 -maes -mpclmul"
 
-FFLAGS="${FFLAGS} -march=x86-64-v3"
-FCFLAGS="${FCFLAGS} -march=x86-64-v3"
+FFLAGS="${FFLAGS} -march=x86-64-v3 -maes -mpclmul"
+FCFLAGS="${FCFLAGS} -march=x86-64-v3 -maes -mpclmul"
 
-RUSTFLAGS="${RUSTFLAGS} --codegen target-cpu=x86-64-v3"
+RUSTFLAGS="${RUSTFLAGS} --codegen target-cpu=x86-64-v3 --codegen target-feature=+aes,+pclmulqdq"
 GOAMD64="v3"
 
-KCFLAGS="${KCFLAGS} -march=x86-64-v3"
+KCFLAGS="${KCFLAGS} -march=x86-64-v3 -maes -mpclmul"
