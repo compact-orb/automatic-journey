@@ -13,8 +13,6 @@ CGO_CXXFLAGS="${CXXFLAGS}"
 CGO_FFLAGS="${FFLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
-KCFLAGS="-O3 -fno-asynchronous-unwind-tables -mllvm -polly -mllvm -polly-invariant-load-hoisting -mllvm -polly-vectorizer=stripmine -pipe"
-
 USE="-sysprof apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanager orc pgo profile secureboot tpm"
 
 EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
