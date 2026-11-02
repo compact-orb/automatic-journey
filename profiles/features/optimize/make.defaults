@@ -15,7 +15,7 @@ CGO_LDFLAGS="${LDFLAGS}"
 
 USE="-sysprof apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanager orc pgo profile secureboot tpm vaapi"
 
-EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
+EMERGE_DEFAULT_OPTS="--getbinpkgonly --package-moves=n --quiet-build --with-bdeps=n"
 
 FEATURES="binpkg-request-signature parallel-install"
 
