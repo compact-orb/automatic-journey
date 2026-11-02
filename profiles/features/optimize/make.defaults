@@ -13,7 +13,7 @@ CGO_CXXFLAGS="${CXXFLAGS}"
 CGO_FFLAGS="${FFLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
-USE="-sysprof apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanager orc pgo profile secureboot tpm"
+USE="-sysprof apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanager orc pgo profile secureboot tpm vaapi"
 
 EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
 
