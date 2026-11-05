@@ -1,23 +1,16 @@
-_opt_strip_flag() {
-    local var="$1" pattern="$2" new_val="" word
+_opt_translate_flag() {
+    local var="$1" from="$2" to="${3-}" new_val="" word
     for word in ${!var}; do
         case "$word" in
-            $pattern) ;;
+            $from) new_val="${new_val:+$new_val${to:+ }}$to" ;;
             *) new_val="${new_val:+$new_val }$word" ;;
         esac
     done
     printf -v "$var" "%s" "$new_val"
 }
 
-_opt_translate_flag() {
-    local var="$1" from="$2" to="$3" new_val="" word
-    for word in ${!var}; do
-        case "$word" in
-            $from) new_val="${new_val:+$new_val }$to" ;;
-            *) new_val="${new_val:+$new_val }$word" ;;
-        esac
-    done
-    printf -v "$var" "%s" "$new_val"
+_opt_strip_flag() {
+    _opt_translate_flag "$1" "$2" ""
 }
 
 _opt_is_gcc() {
@@ -29,19 +22,17 @@ _opt_is_gcc() {
     local cc_bin="${cc##*/}"; cc_bin="${cc_bin%% *}"
     local cxx_bin="${cxx##*/}"; cxx_bin="${cxx_bin%% *}"
 
-    if [[ "${cc_bin}" =~ (^|-)gcc$ ||
-        "${cxx_bin}" =~ (^|-)g\+\+$ ||
-        "${CATEGORY}/${PN}" == "sys-devel/gcc" ||
-        "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]; then
-        return 0
-    fi
-    return 1
+    [[ "${cc_bin}" =~ (^|-)gcc$ ||
+       "${cxx_bin}" =~ (^|-)g\+\+$ ||
+       "${CATEGORY}/${PN}" == "sys-devel/gcc" ||
+       "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]
 }
 
-sanitize_gcc_flags() {
+sanitize_flags() {
     if _opt_is_gcc; then
         local v
-        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS; do
+        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS; do
+            [[ -n "${!v-}" ]] || continue
             _opt_strip_flag "$v" "-Xclang=-mllvm"
             _opt_strip_flag "$v" "-Xclang=-polly*"
             _opt_strip_flag "$v" "-mllvm"
@@ -49,19 +40,18 @@ sanitize_gcc_flags() {
             _opt_translate_flag "$v" "-flto=thin" "-flto=auto"
         done
 
-        _opt_strip_flag LDFLAGS "-Wl,--lto-O3"
-        _opt_strip_flag LDFLAGS "-Wl,--undefined-version"
-        _opt_translate_flag LDFLAGS "-fuse-ld=lld" "-fuse-ld=bfd"
-        _opt_translate_flag LDFLAGS "-flto=thin" "-flto=auto"
+        for v in LDFLAGS CGO_LDFLAGS; do
+            [[ -n "${!v-}" ]] || continue
+            _opt_strip_flag "$v" "-Wl,--lto-O3"
+            _opt_strip_flag "$v" "-Wl,--undefined-version"
+            _opt_translate_flag "$v" "-fuse-ld=lld" "-fuse-ld=bfd"
+            _opt_translate_flag "$v" "-flto=thin" "-flto=auto"
+        done
     fi
 }
 
-sanitize_flags() {
-    sanitize_gcc_flags
-}
-
 _apply_profile_patches() {
-    local profile_dir=$(dirname "${BASH_SOURCE[0]}")
+    local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
     local patch_base="${profile_dir}/patches/${CATEGORY}"
     local patch_dirs=(
         "${patch_base}/${PN}"
@@ -71,7 +61,7 @@ _apply_profile_patches() {
     local dir
     for dir in "${patch_dirs[@]}"; do
         if [[ -d "${dir}" ]]; then
-            local shopt_save=$(shopt -p nullglob)
+            local shopt_save="$(shopt -p nullglob)"
             shopt -s nullglob
             local patches=( "${dir}"/*.patch "${dir}"/*.diff )
             eval "${shopt_save}"
@@ -146,16 +136,13 @@ pre_src_compile() { sanitize_flags; }
 
 post_src_prepare() {
     _apply_profile_patches
-}
 
-if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
-    post_src_prepare() {
-        _apply_profile_patches
-        local profile_dir=$(dirname "${BASH_SOURCE[0]}")
+    if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
+        local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
         local config_dir="${profile_dir}/kernel-config.d"
 
         if [[ -d "${config_dir}" ]]; then
-            local shopt_save=$(shopt -p nullglob)
+            local shopt_save="$(shopt -p nullglob)"
             shopt -s nullglob
             local snippets=( "${config_dir}"/*.config )
             eval "${shopt_save}"
@@ -171,5 +158,5 @@ if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
                     die "Failed to merge profile kernel configs"
             fi
         fi
-    }
-fi
+    fi
+}
