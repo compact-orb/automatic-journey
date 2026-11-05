@@ -64,7 +64,8 @@ src_compile() {
 	ego build -o bin/prebuild ./cmd/prebuild
 
 	# Render profiles, convert ABI 5.0 to 4.0, and generate systemd drop-ins
-	DISTRIBUTION=arch ./bin/prebuild --abi 4 --version 5.0 --buildir .build || die "prebuild failed"
+	DISTRIBUTION=arch ./bin/prebuild --abi 4 --version 5.0 \
+		--buildir .build || die "prebuild failed"
 
 	# Build management tools if USE=tools is enabled
 	if use tools; then
@@ -75,7 +76,7 @@ src_compile() {
 }
 
 src_install() {
-	# Base abstractions and tunables (merged cleanly with apparmor-profiles[minimal])
+	# Base abstractions and tunables (merged with apparmor-profiles[minimal])
 	insinto /etc/apparmor.d/abstractions
 	doins -r .build/apparmor.d/abstractions/*
 
@@ -108,7 +109,9 @@ src_install() {
 	# Tooling
 	if use tools; then
 		dobin bin/aa-install bin/aa-log bin/aa-mode
-		doman share/man/man1/aa-install.1 share/man/man1/aa-mode.1 share/man/man8/aa-log.8
+		doman share/man/man1/aa-install.1 \
+			share/man/man1/aa-mode.1 \
+			share/man/man8/aa-log.8
 		dobashcomp share/bash-completion/completions/aa-install \
 			share/bash-completion/completions/aa-log \
 			share/bash-completion/completions/aa-mode

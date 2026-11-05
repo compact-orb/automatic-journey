@@ -31,7 +31,8 @@ _opt_is_gcc() {
 sanitize_flags() {
     if _opt_is_gcc; then
         local v
-        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS; do
+        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS \
+            CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS; do
             [[ -n "${!v-}" ]] || continue
             _opt_strip_flag "$v" "-Xclang=-mllvm"
             _opt_strip_flag "$v" "-Xclang=-polly*"
