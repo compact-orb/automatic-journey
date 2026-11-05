@@ -59,21 +59,12 @@ BDEPEND="
 
 S="${WORKDIR}/${MY_P}"
 
-src_prepare() {
-	default
-
-	# Adjust unix_chkpwd execution path for Gentoo (/usr/bin/unix_chkpwd)
-	sed -i 's:@{exec_path} = @{sbin}/unix_chkpwd:@{exec_path} = /{,usr/}{bin,sbin}/unix_chkpwd:' \
-		apparmor.d/profiles-s-z/unix-chkpwd || die
-}
-
 src_compile() {
 	# Compile the profile generator
 	ego build -o bin/prebuild ./cmd/prebuild
 
 	# Render profiles, convert ABI 5.0 to 4.0, and generate systemd drop-ins
-	# DISTRIBUTION=opensuse targets AppArmor 5.0 with ABI 4.0 matching Gentoo
-	DISTRIBUTION=opensuse ./bin/prebuild --buildir .build || die "prebuild failed"
+	DISTRIBUTION=arch ./bin/prebuild --abi 4 --version 5.0 --buildir .build || die "prebuild failed"
 
 	# Build management tools if USE=tools is enabled
 	if use tools; then
@@ -90,10 +81,6 @@ src_install() {
 
 	insinto /etc/apparmor.d/tunables
 	doins -r .build/apparmor.d/tunables/*
-
-	# Gentoo-specific PAM drop-in
-	insinto /etc/apparmor.d/abstractions/authentication.d
-	newins - gentoo.conf <<< "/usr/share/pam/** r,"
 
 	# Systemd drop-in units for profile confinement
 	local system_unit_dir="$(systemd_get_systemunitdir)"
