@@ -12,3 +12,4 @@ sys-libs/libapparmor ~amd64
 sec-policy/apparmor-d ~amd64
 sec-policy/apparmor-profiles ~amd64
 virtual/dist-kernel ~amd64
+x11-drivers/nvidia-drivers ~amd64
