@@ -4,6 +4,7 @@ app-admin/bitwarden-desktop-bin ~amd64
 app-editors/zed ~amd64
 app-forensics/lynis ~amd64
 dev-util/nvidia-cuda-toolkit ~amd64
+games-util/game-device-udev-rules ~amd64
 games-util/steam-launcher ~amd64
 gui-wm/labwc ~amd64
 media-libs/nvidia-vaapi-driver ~amd64
