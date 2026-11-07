@@ -2,6 +2,7 @@ app-admin/ansible ~amd64
 app-admin/ansible-core ~amd64
 app-forensics/lynis ~amd64
 dev-util/nvidia-cuda-toolkit ~amd64
+gui-wm/labwc ~amd64
 net-misc/moonlight ~amd64
 net-misc/sunshine ~amd64
 sys-kernel/gentoo-kernel ~amd64
