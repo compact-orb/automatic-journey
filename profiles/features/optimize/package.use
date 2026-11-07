@@ -16,3 +16,22 @@ media-libs/libsdl2 kms
 
 # required by app-containers/podman
 net-firewall/iptables nftables
+
+# required by www-servers/nginx
+app-misc/mime-types nginx
+
+# required by net-proxy/mitmproxy
+app-arch/brotli python
+
+# required by net-misc/remmina
+dev-libs/libdbusmenu gtk3
+
+# required by media-video/shotcut
+media-libs/mlt ffmpeg frei0r jack
+media-libs/opencv contrib contribdnn features2d
+
+# required by media-gfx/simple-scan
+x11-misc/colord vala
+
+# required by media-gfx/img2pdf
+dev-lang/python tk

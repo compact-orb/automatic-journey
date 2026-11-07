@@ -19,6 +19,7 @@ sys-apps/tuned ~amd64
 sys-apps/zram-generator ~amd64
 sys-fs/compsize ~amd64
 sys-libs/libapparmor ~amd64
+sys-libs/libudev-compat ~amd64
 sec-policy/apparmor-d ~amd64
 sec-policy/apparmor-profiles ~amd64
 virtual/dist-kernel ~amd64
