@@ -145,11 +145,16 @@ src_install() {
 	cat <<- CONF > "${ED}/etc/default/google-chrome"
 	# ChromeOS User Agent for Widevine DRM streaming
 	CHROME_USER_AGENT="Mozilla/5.0 (X11; CrOS x86_64 10066.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${PV%%.*}.0.0.0 Safari/537.36"
+	# Hardware video acceleration flags
+	CHROME_FLAGS="--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL,AcceleratedVideoEncoder,VaapiOnNvidiaGPUs"
 	CONF
 
 	local hook
 	hook='if [[ -f /etc/default/google-chrome ]]; then\n'
 	hook+='\tsource /etc/default/google-chrome\n'
+	hook+='fi\n'
+	hook+='if [[ -n "${CHROME_FLAGS}" ]]; then\n'
+	hook+='\tset -- ${CHROME_FLAGS} "$@"\n'
 	hook+='fi\n'
 	hook+='if [[ -n "${CHROME_USER_AGENT:-\${CHROME_OS_UA}}" ]]; then\n'
 	hook+='\tset -- --user-agent="${CHROME_USER_AGENT:-\${CHROME_OS_UA}}" "$@"\n'
