@@ -21,9 +21,6 @@ net-firewall/iptables nftables
 # required by www-servers/nginx
 app-misc/mime-types nginx
 
-# required by net-proxy/mitmproxy
-app-arch/brotli python
-
 # required by net-misc/remmina
 dev-libs/libdbusmenu gtk3
 
@@ -106,3 +103,4 @@ virtual/libiconv abi_x86_32
 dev-lang/rust-bin abi_x86_32
 virtual/libelf abi_x86_32
 virtual/opengl abi_x86_32
+dev-libs/elfutils abi_x86_32
