@@ -144,18 +144,19 @@ src_install() {
 	dodir /etc/default
 	cat <<- CONF > "${ED}/etc/default/google-chrome"
 	# ChromeOS User Agent for Widevine DRM streaming
-	CHROME_OS_UA="Mozilla/5.0 (X11; CrOS x86_64 10066.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${PV%%.*}.0.0.0 Safari/537.36"
-	CHROME_EXTRA_FLAGS="--user-agent=\"\${CHROME_OS_UA}\""
+	CHROME_USER_AGENT="Mozilla/5.0 (X11; CrOS x86_64 10066.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${PV%%.*}.0.0.0 Safari/537.36"
 	CONF
 
-	local orig_exec='exec -a "$0" "$HERE/chrome" "$@"'
-	local new_exec
-	new_exec='[[ -f /etc/default/google-chrome ]] \&\& '
-	new_exec+='source /etc/default/google-chrome\n'
-	new_exec+='exec -a "$0" "$HERE/chrome" ${CHROME_EXTRA_FLAGS} "$@"'
+	local hook
+	hook='if [[ -f /etc/default/google-chrome ]]; then\n'
+	hook+='\tsource /etc/default/google-chrome\n'
+	hook+='fi\n'
+	hook+='if [[ -n "${CHROME_USER_AGENT:-\${CHROME_OS_UA}}" ]]; then\n'
+	hook+='\tset -- --user-agent="${CHROME_USER_AGENT:-\${CHROME_OS_UA}}" "$@"\n'
+	hook+='fi\n&'
 
 	sed --in-place \
-		"s|^${orig_exec}|${new_exec}|" \
+		"s|^exec -a .*|${hook}|" \
 		"${ED}/${CHROME_HOME}/google-chrome" || \
 		die "Failed to patch google-chrome launcher"
 }
