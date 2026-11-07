@@ -2,6 +2,7 @@ app-arch/7zip rar uasm
 app-containers/podman wrapper
 dev-util/android-tools udev
 llvm-runtimes/clang-runtime polly
+media-gfx/img2pdf -gui
 media-video/pipewire sound-server
 net-misc/networkmanager iwd
 net-misc/sunshine -cuda
@@ -31,9 +32,6 @@ sys-libs/zlib minizip
 
 # required by media-gfx/simple-scan
 x11-misc/colord vala
-
-# required by media-gfx/img2pdf
-dev-lang/python tk
 
 # required by app-emulation/virt-manager
 net-misc/spice-gtk usbredir
