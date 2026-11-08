@@ -8,6 +8,7 @@ games-util/game-device-udev-rules ~amd64
 games-util/steam-launcher ~amd64
 gui-wm/labwc ~amd64
 media-libs/nvidia-vaapi-driver ~amd64
+media-sound/helvum ~amd64
 media-video/shotcut ~amd64
 net-misc/moonlight ~amd64
 net-misc/sunshine ~amd64
