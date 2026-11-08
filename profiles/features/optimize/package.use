@@ -2,6 +2,7 @@ app-arch/7zip rar uasm
 app-containers/podman wrapper
 dev-util/android-tools udev
 llvm-runtimes/clang-runtime polly
+media-fonts/fonts-meta emoji ms
 media-gfx/img2pdf -gui
 media-video/pipewire sound-server
 net-misc/networkmanager iwd
