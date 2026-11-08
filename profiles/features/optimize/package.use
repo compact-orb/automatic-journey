@@ -17,6 +17,7 @@ media-libs/libsdl2 kms
 
 # required by app-containers/podman
 net-firewall/iptables nftables
+net-firewall/nftables json
 
 # required by www-servers/nginx
 app-misc/mime-types nginx
