@@ -5,7 +5,6 @@ llvm-runtimes/clang-runtime polly
 media-gfx/img2pdf -gui
 media-video/pipewire sound-server
 net-misc/networkmanager iwd
-net-misc/sunshine -cuda
 sys-apps/fwupd nvme uefi
 sys-apps/systemd boot cryptsetup
 sys-devel/gcc -pgo
