@@ -1,0 +1,40 @@
+app-arch/7zip rar uasm
+app-containers/podman wrapper
+dev-util/android-tools udev
+llvm-runtimes/clang-runtime polly
+media-fonts/fonts-meta emoji ms
+media-gfx/img2pdf -gui
+media-video/pipewire sound-server
+net-misc/networkmanager iwd
+sys-apps/fwupd nvme uefi
+sys-apps/systemd boot cryptsetup
+sys-devel/gcc -pgo
+sys-kernel/installkernel systemd-boot
+sec-policy/apparmor-profiles minimal
+www-servers/nginx aio
+
+# required by net-misc/moonlight
+media-libs/libsdl2 kms
+
+# required by app-containers/podman
+net-firewall/iptables nftables
+net-firewall/nftables json
+
+# required by www-servers/nginx
+app-misc/mime-types nginx
+
+# required by net-misc/remmina
+dev-libs/libdbusmenu gtk3
+
+# required by media-video/shotcut
+media-libs/mlt ffmpeg frei0r jack
+media-libs/opencv contrib contribdnn features2d
+sys-libs/zlib minizip
+
+# required by media-gfx/simple-scan
+x11-misc/colord vala
+
+# required by app-emulation/virt-manager
+net-misc/spice-gtk usbredir
+net-dns/dnsmasq script
+net-libs/gnutls pkcs11 tools

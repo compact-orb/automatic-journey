@@ -1,0 +1,5 @@
+*sys-devel/gcc
+*sys-devel/gcc-config
+
+-*llvm-runtimes/libcxx
+-*llvm-runtimes/libcxxabi

@@ -1,0 +1,163 @@
+_opt_translate_flag() {
+    local var="$1" from="$2" to="${3-}" new_val="" word
+    for word in ${!var}; do
+        case "$word" in
+            $from) new_val="${new_val:+$new_val${to:+ }}$to" ;;
+            *) new_val="${new_val:+$new_val }$word" ;;
+        esac
+    done
+    printf -v "$var" "%s" "$new_val"
+}
+
+_opt_strip_flag() {
+    _opt_translate_flag "$1" "$2" ""
+}
+
+_opt_is_gcc() {
+    if declare -f tc-is-gcc >/dev/null && tc-is-gcc; then
+        return 0
+    fi
+    local cc="${CC:-$(tc-getCC 2>/dev/null)}"
+    local cxx="${CXX:-$(tc-getCXX 2>/dev/null)}"
+    local cc_bin="${cc##*/}"; cc_bin="${cc_bin%% *}"
+    local cxx_bin="${cxx##*/}"; cxx_bin="${cxx_bin%% *}"
+
+    [[ "${cc_bin}" =~ (^|-)gcc$ ||
+       "${cxx_bin}" =~ (^|-)g\+\+$ ||
+       "${CATEGORY}/${PN}" == "sys-devel/gcc" ||
+       "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]
+}
+
+sanitize_flags() {
+    if _opt_is_gcc; then
+        local v
+        for v in CFLAGS CXXFLAGS FFLAGS FCFLAGS \
+            CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS; do
+            [[ -n "${!v-}" ]] || continue
+            _opt_strip_flag "$v" "-Xclang=-mllvm"
+            _opt_strip_flag "$v" "-Xclang=-polly*"
+            _opt_strip_flag "$v" "-mllvm"
+            _opt_strip_flag "$v" "-polly*"
+            _opt_translate_flag "$v" "-flto=thin" "-flto=auto"
+        done
+
+        for v in LDFLAGS CGO_LDFLAGS; do
+            [[ -n "${!v-}" ]] || continue
+            _opt_strip_flag "$v" "-Wl,--lto-O3"
+            _opt_strip_flag "$v" "-Wl,--undefined-version"
+            _opt_translate_flag "$v" "-fuse-ld=lld" "-fuse-ld=bfd"
+            _opt_translate_flag "$v" "-flto=thin" "-flto=auto"
+        done
+    fi
+}
+
+_apply_profile_patches() {
+    local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
+    local patch_base="${profile_dir}/patches/${CATEGORY}"
+    local patch_dirs=(
+        "${patch_base}/${PN}"
+        "${patch_base}/${P}"
+        "${patch_base}/${PF}"
+    )
+    local dir
+    for dir in "${patch_dirs[@]}"; do
+        if [[ -d "${dir}" ]]; then
+            local shopt_save="$(shopt -p nullglob)"
+            shopt -s nullglob
+            local patches=( "${dir}"/*.patch "${dir}"/*.diff )
+            eval "${shopt_save}"
+
+            if [[ ${#patches[@]} -gt 0 ]]; then
+                einfo "Applying profile patches from ${dir}:"
+                local p
+                for p in "${patches[@]}"; do
+                    eapply "${p}"
+                done
+            fi
+        fi
+    done
+}
+
+_source_profile_package_env() {
+    local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
+    local penv_target="${profile_dir}/package.env"
+    local env_dir="${profile_dir}/env"
+
+    [[ -e "${penv_target}" && -d "${env_dir}" ]] || return 0
+
+    local -a penv_files=()
+    if [[ -d "${penv_target}" ]]; then
+        local f
+        for f in "${penv_target}"/*; do
+            [[ -f "${f}" ]] && penv_files+=("${f}")
+        done
+    elif [[ -f "${penv_target}" ]]; then
+        penv_files+=("${penv_target}")
+    fi
+
+    local cp="${CATEGORY}/${PN}"
+    local cps="${CATEGORY}/${PN}:${SLOT%/*}"
+    local cpv="${CATEGORY}/${P}"
+    local cpf="${CATEGORY}/${PF}"
+
+    local penv_file line
+    for penv_file in "${penv_files[@]}"; do
+        while IFS= read -r line || [[ -n "${line}" ]]; do
+            line="${line%%#*}"
+            line="${line#"${line%%[![:space:]]*}"}"
+            line="${line%"${line##*[![:space:]]}"}"
+            [[ -z "${line}" ]] && continue
+
+            local atom env_names
+            read -r atom env_names <<< "${line}"
+            [[ -z "${atom}" || -z "${env_names}" ]] && continue
+
+            local atom_stripped="${atom#=}"
+            if [[ "${cp}" == ${atom} || \
+                  "${cps}" == ${atom} || \
+                  "${cpv}" == ${atom_stripped} || \
+                  "${cpf}" == ${atom_stripped} ]]; then
+                local env_name
+                for env_name in ${env_names}; do
+                    local env_path="${env_dir}/${env_name}"
+                    if [[ -f "${env_path}" ]]; then
+                        source "${env_path}"
+                    fi
+                done
+            fi
+        done < "${penv_file}"
+    done
+}
+
+_source_profile_package_env
+sanitize_flags
+pre_src_prepare() { sanitize_flags; }
+pre_src_configure() { sanitize_flags; }
+pre_src_compile() { sanitize_flags; }
+
+post_src_prepare() {
+    _apply_profile_patches
+
+    if [[ "${CATEGORY}/${PN}" == "sys-kernel/gentoo-kernel" ]]; then
+        local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
+        local config_dir="${profile_dir}/kernel-config.d"
+
+        if [[ -d "${config_dir}" ]]; then
+            local shopt_save="$(shopt -p nullglob)"
+            shopt -s nullglob
+            local snippets=( "${config_dir}"/*.config )
+            eval "${shopt_save}"
+
+            if [[ ${#snippets[@]} -gt 0 ]]; then
+                einfo "Applying profile kernel config snippets:"
+                local snippet
+                for snippet in "${snippets[@]}"; do
+                    einfo "  - ${snippet}"
+                done
+                ./scripts/kconfig/merge_config.sh -m -r \
+                    .config "${snippets[@]}" ||
+                    die "Failed to merge profile kernel configs"
+            fi
+        fi
+    fi
+}

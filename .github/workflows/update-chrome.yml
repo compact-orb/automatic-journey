@@ -1,0 +1,53 @@
+name: Update Chrome
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-chrome:
+    name: Update Chrome
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Import Gentoo Keys
+        run: |
+          mkdir --parents ~/.gnupg && chmod 700 ~/.gnupg
+          gpg --import .github/keys/gentoo-release.asc
+
+      - name: Fetch gentoo-mirror/gentoo (Shallow & Sparse)
+        run: |
+          git clone \
+            --depth=1 \
+            --filter=blob:none \
+            --sparse \
+            https://github.com/gentoo-mirror/gentoo.git \
+            /tmp/gentoo-mirror
+          cd /tmp/gentoo-mirror
+          git sparse-checkout set www-client/google-chrome
+
+      - name: Verify Upstream PGP Signature
+        run: |
+          cd /tmp/gentoo-mirror
+          git verify-commit HEAD
+
+      - name: Run Update Script
+        run: |
+          ./.scripts/update-chrome.sh \
+            /tmp/gentoo-mirror/www-client/google-chrome \
+            ./www-client/google-chrome \
+            "https://lively-flower-f91a.compact-orb.workers.dev/local/libwidevinecdm.so"
+
+      - name: Commit and Push (Signed with GitHub's Key)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./.scripts/github-commit.sh \
+            www-client/google-chrome \
+            "www-client/google-chrome: update from gentoo-mirror"

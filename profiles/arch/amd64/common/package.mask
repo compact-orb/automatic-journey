@@ -1,0 +1,2 @@
+# Mask upstream google-chrome to prefer automatic-journey's version
+www-client/google-chrome::gentoo

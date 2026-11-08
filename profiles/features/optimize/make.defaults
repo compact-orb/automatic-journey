@@ -1,0 +1,31 @@
+CFLAGS="-O3 -Xclang=-mllvm -Xclang=-polly -Xclang=-mllvm -Xclang=-polly-invariant-load-hoisting -Xclang=-mllvm -Xclang=-polly-vectorizer=stripmine -fdata-sections -ffp-contract=fast -ffunction-sections -flto=thin -fno-asynchronous-unwind-tables -fno-math-errno -fno-plt -fno-semantic-interposition -pipe"
+CXXFLAGS="${CFLAGS}"
+
+FFLAGS="-O3 -fdata-sections -ffunction-sections -flto -fno-asynchronous-unwind-tables -fno-math-errno -fno-plt -fno-semantic-interposition -fno-trapping-math -pipe"
+FCFLAGS="${FFLAGS}"
+
+LDFLAGS="${LDFLAGS} -Wl,--gc-sections -Wl,--lto-O3 -Wl,--undefined-version -flto=thin -fuse-ld=lld"
+
+RUSTFLAGS="--codegen linker-plugin-lto --codegen linker=clang"
+
+CGO_CFLAGS="${CFLAGS}"
+CGO_CXXFLAGS="${CXXFLAGS}"
+CGO_FFLAGS="${FFLAGS}"
+CGO_LDFLAGS="${LDFLAGS}"
+
+USE="-sysprof apparmor dist-kernel dracut jemalloc jit ktls lto modules-sign networkmanager orc pgo profile secureboot tpm vaapi"
+
+EMERGE_DEFAULT_OPTS="--getbinpkgonly --quiet-build --with-bdeps=n"
+
+FEATURES="binpkg-request-signature parallel-install"
+
+PORTAGE_CHECKSUM_FILTER="* -md5"
+
+CHECKCONFIG_DONOTHING="1"
+
+FETCHCOMMAND="/usr/bin/aria2c --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
+RESUMECOMMAND="/usr/bin/aria2c --continue=true --dir=\"\${DISTDIR}\" --file-allocation=none --max-concurrent-downloads=4 --max-connection-per-server=4 --max-tries=3 --out=\"\${FILE}\" --split=4 \"\${URI}\""
+
+ACCEPT_LICENSE="*"
+
+GENTOO_MIRRORS="http://gentoo.mirrors.ovh.net/gentoo-distfiles http://mirror.planetunix.net/pub/gentoo http://distfiles.gentoo.org"
