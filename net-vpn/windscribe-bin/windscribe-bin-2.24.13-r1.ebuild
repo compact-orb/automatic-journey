@@ -22,6 +22,7 @@ RDEPEND="
 	acct-group/windscribe
 	acct-user/windscribe
 	media-libs/libglvnd
+	net-firewall/nftables
 	sys-apps/dbus
 	sys-libs/glibc
 	x11-libs/libX11
