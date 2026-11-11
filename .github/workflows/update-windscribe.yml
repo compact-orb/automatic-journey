@@ -1,0 +1,32 @@
+name: Update Windscribe
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 19 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-windscribe:
+    name: Update Windscribe
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Run Update Script
+        run: |
+          ./.scripts/update-windscribe.sh
+
+      - name: Commit and Push (Signed with GitHub's Key)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ebuilds=(net-vpn/windscribe-bin/windscribe-bin-*.ebuild)
+          version="${ebuilds[0]##*-}"
+          version="${version%.ebuild}"
+          ./.scripts/github-commit.sh \
+            net-vpn/windscribe-bin \
+            "net-vpn/windscribe-bin: update to ${version}"
