@@ -52,13 +52,13 @@ src_install() {
 		echo "linux_deb_arm64" > "${ED}"/etc/windscribe/platform || die
 	fi
 
-	# Set setgid permission on Windscribe GUI binary to communicate with helper
+	# Set setgid permission on Windscribe GUI binary to communicate with
+	# helper
 	fowners :windscribe /opt/windscribe/Windscribe
 	fperms 2755 /opt/windscribe/Windscribe
 
-	# Remove Debian package preset and non-standard autostart dir
+	# Remove Debian package preset
 	rm --recursive "${ED}"/usr/lib/systemd/system-preset || die
-	rm --recursive "${ED}"/etc/windscribe/autostart || die
 }
 
 pkg_postinst() {
