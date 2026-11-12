@@ -1,0 +1,14 @@
+Avoid redefinition of PangoRenderer cleanup function with Pango >= 1.58.
+
+--- a/clutter/clutter/pango/clutter-pango-private.h
++++ b/clutter/clutter/pango/clutter-pango-private.h
+@@ -79,7 +79,9 @@ void clutter_show_layout (ClutterContext    *context,
+                           ClutterColorState *color_state,
+                           ClutterColorState *target_color_state);
+ 
++#if !PANGO_VERSION_CHECK(1, 58, 0)
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (PangoRenderer, g_object_unref)
++#endif
+ 
+ static inline PangoDirection
+ clutter_text_direction_to_pango_direction (ClutterTextDirection dir)
