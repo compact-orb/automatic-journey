@@ -54,11 +54,9 @@ sanitize_flags() {
 _apply_profile_patches() {
     local profile_dir="$(dirname "${BASH_SOURCE[0]}")"
     local patch_base="${profile_dir}/patches/${CATEGORY}"
-    local patch_dirs=(
-        "${patch_base}/${PN}"
-        "${patch_base}/${P}"
-        "${patch_base}/${PF}"
-    )
+    local -a patch_dirs=( "${patch_base}/${PN}" )
+    [[ "${P}" != "${PN}" ]] && patch_dirs+=( "${patch_base}/${P}" )
+    [[ "${PF}" != "${P}" ]] && patch_dirs+=( "${patch_base}/${PF}" )
     local dir
     for dir in "${patch_dirs[@]}"; do
         if [[ -d "${dir}" ]]; then
