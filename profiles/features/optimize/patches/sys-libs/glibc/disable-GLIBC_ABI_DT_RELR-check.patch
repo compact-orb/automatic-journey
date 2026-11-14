@@ -1,4 +1,4 @@
-# Retrived from https://thebrokenrail.com/2022/12/31/xfinity-stream-on-linux.html
+# Retrieved from https://thebrokenrail.com/2022/12/31/xfinity-stream-on-linux.html
 --- glibc-master-old/elf/dl-version.c
 +++ glibc-master/elf/dl-version.c
 @@ -362,7 +362,7 @@

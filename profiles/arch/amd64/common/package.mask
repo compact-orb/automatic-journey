@@ -1,2 +1,2 @@
-# Mask upstream google-chrome to prefer automatic-journey's version
+# Mask ::gentoo google-chrome so this overlay's ebuild is used
 www-client/google-chrome::gentoo

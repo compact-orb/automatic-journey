@@ -49,14 +49,14 @@ template_ebuild="${existing_ebuilds[0]}"
 echo "Creating ${TARGET_EBUILD} from ${template_ebuild}..."
 cp "${template_ebuild}" "${TARGET_EBUILD}"
 
-# 3. Prune older ebuilds
+# 3. Remove older ebuilds
 for old_ebuild in "${existing_ebuilds[@]}"; do
 	[[ "${old_ebuild}" == "${TARGET_EBUILD}" ]] && continue
 	echo "Removing old ebuild: $(basename "${old_ebuild}")"
 	rm --force "${old_ebuild}"
 done
 
-# 4. Fetch release assets and compute Manifest
+# 4. Download release packages and write Manifest
 MANIFEST_FILE="${OVERLAY_DIR}/Manifest"
 > "${MANIFEST_FILE}"
 
@@ -70,7 +70,7 @@ for arch in "${ARCHES[@]}"; do
 	deb_url="${base_url}/v${TARGET_VER}/${deb_name}"
 	deb_path="${tmp_dir}/${deb_name}"
 
-	echo "Fetching ${deb_name} for checksumming..."
+	echo "Downloading ${deb_name} to compute checksums..."
 	curl \
 		--fail \
 		--location \
@@ -89,4 +89,4 @@ done
 
 sort --output="${MANIFEST_FILE}" --unique "${MANIFEST_FILE}"
 
-echo "Done! Windscribe ebuild and Manifest updated to ${TARGET_VER}."
+echo "Updated Windscribe ebuild and Manifest to ${TARGET_VER}."

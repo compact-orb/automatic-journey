@@ -83,7 +83,7 @@ src_install() {
 	insinto /etc/apparmor.d/tunables
 	doins -r .build/apparmor.d/tunables/*
 
-	# Systemd drop-in units for profile confinement
+	# Systemd drop-in configs for confined services
 	local system_unit_dir="$(systemd_get_systemunitdir)"
 	local user_unit_dir="$(systemd_get_userunitdir)"
 	local file service
@@ -106,7 +106,7 @@ src_install() {
 	insinto /usr/share/apparmor.d
 	doins -r .build/apparmor.d/{groups,mappings,namespaces,profiles-*}
 
-	# Tooling
+	# CLI tools, man pages, and shell completions
 	if use tools; then
 		dobin bin/aa-install bin/aa-log bin/aa-mode
 		doman share/man/man1/aa-install.1 \
@@ -128,9 +128,9 @@ src_install() {
 pkg_postinst() {
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		elog "apparmor.d profiles have been installed."
-		elog "To deploy profiles to /etc/apparmor.d in complain mode:"
+		elog "To install profiles into /etc/apparmor.d in complain mode:"
 		elog "  aa-install -i -c"
-		elog "Ensure apparmor.service is enabled:"
+		elog "Make sure apparmor.service is enabled:"
 		elog "  systemctl enable --now apparmor.service"
 	fi
 }

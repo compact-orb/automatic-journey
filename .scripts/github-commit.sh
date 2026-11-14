@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Create a GitHub-signed commit using GitHub's native GraphQL API.
+# Create a GitHub-signed commit via the GraphQL API.
 
 set -euo pipefail
 
@@ -9,7 +9,7 @@ COMMIT_MSG="${2:-www-client/google-chrome: update from gentoo-mirror}"
 # Check for modified, added, or deleted files in target directory
 status_output="$(git status --porcelain "${TARGET_DIR}")"
 if [[ -z "${status_output}" ]]; then
-	echo "No changes detected in ${TARGET_DIR}."
+	echo "No changes in ${TARGET_DIR}."
 	exit 0
 fi
 
@@ -57,4 +57,4 @@ payload+="\"deletions\":[${deletions}]}}}}"
 
 echo "Creating GitHub-signed commit on ${REPO}@${BRANCH}..."
 gh api graphql --input - <<< "${payload}"
-echo "Successfully pushed signed commit."
+echo "Pushed signed commit."

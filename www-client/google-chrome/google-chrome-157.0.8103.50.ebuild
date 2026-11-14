@@ -140,7 +140,7 @@ src_install() {
 	cp "${DISTDIR}/libwidevinecdm.so" "${target_dir}/libwidevinecdm.so" || \
 		die "Failed to copy Widevine CDM"
 
-	# Configure ChromeOS User-Agent wrapper (Tier 1)
+	# Add ChromeOS User-Agent and GPU video acceleration flags
 	dodir /etc/default
 	cat <<- CONF > "${ED}/etc/default/google-chrome"
 	# ChromeOS User Agent for Widevine DRM streaming

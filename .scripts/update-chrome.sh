@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Update Google Chrome ebuilds with ChromeOS Widevine CDM in Gentoo overlay.
+# Update Google Chrome ebuilds with ChromeOS Widevine CDM.
 
 set -euo pipefail
 
@@ -39,14 +39,14 @@ for ebuild_path in "${upstream_ebuilds[@]}"; do
 	src_uri_expr+='${MY_PN}/${MY_P}_amd64.deb\n'
 	src_uri_expr+="\t${WIDEVINE_URL}\n\""
 
-	# Transform upstream ebuild directly into overlay variant
+	# Adapt upstream ebuild for this overlay
 	sed \
 		--expression='s/^KEYWORDS=".*"/KEYWORDS="-* amd64"/' \
 		--expression='s/^src_install()/upstream_src_install()/' \
 		--expression="${src_uri_expr}" \
 		"${ebuild_path}" > "${target_ebuild}"
 
-	# Append custom src_install hook
+	# Append custom src_install
 	cat << 'EOF' >> "${target_ebuild}"
 
 src_install() {
@@ -58,7 +58,7 @@ src_install() {
 	cp "${DISTDIR}/libwidevinecdm.so" "${target_dir}/libwidevinecdm.so" || \
 		die "Failed to copy Widevine CDM"
 
-	# Configure ChromeOS User-Agent wrapper (Tier 1)
+	# Add ChromeOS User-Agent and GPU video acceleration flags
 	dodir /etc/default
 	cat <<- CONF > "${ED}/etc/default/google-chrome"
 	# ChromeOS User Agent for Widevine DRM streaming
@@ -86,7 +86,7 @@ src_install() {
 EOF
 done
 
-# 3. Prune obsolete ebuilds from overlay
+# 3. Remove old ebuilds not present upstream
 for local_ebuild_path in "${OVERLAY_DIR}"/google-chrome-*.ebuild; do
 	[[ -e "${local_ebuild_path}" ]] || continue
 	local_name="$(basename "${local_ebuild_path}")"
@@ -108,7 +108,7 @@ fi
 
 tmp_widevine="$(mktemp)"
 trap 'rm --force "${tmp_widevine}"' EXIT
-echo "Fetching ${WIDEVINE_URL} for checksumming..."
+echo "Downloading ${WIDEVINE_URL} to compute checksums..."
 curl \
 	--fail \
 	--location \
@@ -125,4 +125,4 @@ echo "DIST libwidevinecdm.so ${wv_size} BLAKE2B ${wv_b2} SHA512 ${wv_sha512}" \
 	>> "${manifest_file}"
 sort --output="${manifest_file}" --unique "${manifest_file}"
 
-echo "Done! Ebuilds and Manifest updated successfully."
+echo "Updated ebuilds and Manifest."

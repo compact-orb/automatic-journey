@@ -9,6 +9,6 @@
 		<remote-id type="github">roddhjav/apparmor.d</remote-id>
 	</upstream>
 	<use>
-		<flag name="tools">Install userland management CLI tools (aa-install, aa-log, aa-mode)</flag>
+		<flag name="tools">Install CLI management tools (aa-install, aa-log, aa-mode)</flag>
 	</use>
 </pkgmetadata>
