@@ -2,6 +2,7 @@ app-admin/ansible ~amd64
 app-admin/ansible-core ~amd64
 app-admin/bitwarden-desktop-bin ~amd64
 app-editors/antigravity ~amd64
+app-editors/antigravity-ide ~amd64
 app-editors/zed ~amd64
 app-forensics/lynis ~amd64
 dev-util/antigravity-cli ~amd64
