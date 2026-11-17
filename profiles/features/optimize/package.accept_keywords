@@ -1,8 +1,10 @@
 app-admin/ansible ~amd64
 app-admin/ansible-core ~amd64
 app-admin/bitwarden-desktop-bin ~amd64
+app-editors/antigravity ~amd64
 app-editors/zed ~amd64
 app-forensics/lynis ~amd64
+dev-util/antigravity-cli ~amd64
 dev-util/nvidia-cuda-toolkit ~amd64
 games-util/game-device-udev-rules ~amd64
 games-util/steam-launcher ~amd64
