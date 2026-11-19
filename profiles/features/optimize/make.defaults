@@ -28,4 +28,4 @@ RESUMECOMMAND="/usr/bin/aria2c --continue=true --dir=\"\${DISTDIR}\" --file-allo
 
 ACCEPT_LICENSE="*"
 
-GENTOO_MIRRORS="http://gentoo.mirrors.ovh.net/gentoo-distfiles http://mirror.planetunix.net/pub/gentoo http://distfiles.gentoo.org"
+GENTOO_MIRRORS="http://mirrors.edge.kernel.org/gentoo/ http://distfiles.gentoo.org"
