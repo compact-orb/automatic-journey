@@ -14,6 +14,7 @@ media-fonts/intel-one-mono ~amd64
 media-libs/nvidia-vaapi-driver ~amd64
 media-sound/helvum ~amd64
 media-video/shotcut ~amd64
+net-mail/mail-mcp ~amd64
 net-misc/moonlight ~amd64
 net-misc/sunshine ~amd64
 net-vpn/windscribe-bin ~amd64
