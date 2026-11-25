@@ -1,0 +1,6 @@
+gentoo:default/linux/arm64/23.0/llvm
+../../../features/llvm-libstdc++
+gentoo:features/hardened/arm64
+../../../targets/gnome
+../../../features/optimize
+../../../arch/arm64/armv8.2-a

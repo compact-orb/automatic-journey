@@ -1,0 +1,11 @@
+CFLAGS="${CFLAGS} -march=armv8.2-a+crypto"
+CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+crypto"
+
+FFLAGS="${FFLAGS} -march=armv8.2-a+crypto"
+FCFLAGS="${FCFLAGS} -march=armv8.2-a+crypto"
+
+RUSTFLAGS="${RUSTFLAGS} --codegen target-feature=+lse,+aes,+sha2,+crc"
+GOARM64="v8.2"
+
+CPU_FLAGS_ARM="aes crc32 pmull sha1 sha2"
+VIDEO_CARDS="ast dummy fbdev lavapipe virgl zink"
