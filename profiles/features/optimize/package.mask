@@ -1,0 +1,2 @@
+# Mask ::guru amneziawg-modules so this overlay's ebuild is used
+net-vpn/amneziawg-modules::guru

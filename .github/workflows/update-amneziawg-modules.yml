@@ -1,0 +1,32 @@
+name: Update AmneziaWG Modules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 20 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-amneziawg-modules:
+    name: Update AmneziaWG Modules
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Run Update Script
+        run: |
+          ./.scripts/update-amneziawg-modules.sh
+
+      - name: Commit and Push (Signed with GitHub's Key)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ebuilds=(net-vpn/amneziawg-modules/amneziawg-modules-*.ebuild)
+          version="${ebuilds[0]##*/amneziawg-modules-}"
+          version="${version%.ebuild}"
+          ./.scripts/github-commit.sh \
+            net-vpn/amneziawg-modules \
+            "net-vpn/amneziawg-modules: update to ${version}"

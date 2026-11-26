@@ -18,6 +18,7 @@ media-video/shotcut ~amd64 ~arm64
 net-mail/mail-mcp ~amd64
 net-misc/moonlight ~amd64 ~arm64
 net-misc/sunshine ~amd64 ~arm64
+net-vpn/amneziawg-modules ~amd64 ~arm64
 net-vpn/windscribe-bin ~amd64 ~arm64
 sys-kernel/gentoo-kernel ~amd64 ~arm64
 sys-kernel/gentoo-sources ~amd64 ~arm64
