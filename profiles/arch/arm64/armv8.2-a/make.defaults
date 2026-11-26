@@ -1,11 +1,11 @@
-CFLAGS="${CFLAGS} -march=armv8.2-a+crypto"
-CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+crypto"
+CFLAGS="${CFLAGS} -march=armv8.2-a+crypto+dotprod+fp16+rcpc"
+CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+crypto+dotprod+fp16+rcpc"
 
-FFLAGS="${FFLAGS} -march=armv8.2-a+crypto"
-FCFLAGS="${FCFLAGS} -march=armv8.2-a+crypto"
+FFLAGS="${FFLAGS} -march=armv8.2-a+crypto+dotprod+fp16+rcpc"
+FCFLAGS="${FCFLAGS} -march=armv8.2-a+crypto+dotprod+fp16+rcpc"
 
-RUSTFLAGS="${RUSTFLAGS} --codegen target-feature=+lse,+aes,+sha2,+crc"
-GOARM64="v8.2"
+RUSTFLAGS="${RUSTFLAGS} --codegen target-feature=+aes,+crc,+dotprod,+fp16,+lse,+rcpc,+rdm,+sha2"
+GOARM64="v8.2,crypto"
 
-CPU_FLAGS_ARM="aes crc32 pmull sha1 sha2"
+CPU_FLAGS_ARM="aes asimd asimddp asimdhp crc32 sha1 sha2"
 VIDEO_CARDS="ast dummy fbdev lavapipe virgl zink"
