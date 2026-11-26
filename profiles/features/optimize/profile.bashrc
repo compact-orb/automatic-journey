@@ -22,10 +22,8 @@ _opt_is_gcc() {
     local cc_bin="${cc##*/}"; cc_bin="${cc_bin%% *}"
     local cxx_bin="${cxx##*/}"; cxx_bin="${cxx_bin%% *}"
 
-    [[ "${cc_bin}" =~ (^|-)gcc$ ||
-       "${cxx_bin}" =~ (^|-)g\+\+$ ||
-       "${CATEGORY}/${PN}" == "sys-devel/gcc" ||
-       "${CATEGORY}/${PN}" == "sys-libs/glibc" ]]
+    [[ "${cc_bin}" =~ (^|-)gcc(-[0-9.]+)?$ ||
+       "${cxx_bin}" =~ (^|-)g\+\+(-[0-9.]+)?$ ]]
 }
 
 sanitize_flags() {
